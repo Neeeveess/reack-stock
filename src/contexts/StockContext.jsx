@@ -17,7 +17,7 @@ export function StockContextProvider({ children }) {
     const items = JSON.parse(storedItems);
     items.forEach((item) => {
       item.createdAt = new Date(item.createdAt);
-      item.updatedAd = new Date(item.updatedAd);
+      item.updatedAt = new Date(item.updatedAt);
     });
     return items;
   });
@@ -25,6 +25,22 @@ export function StockContextProvider({ children }) {
   const addItem = (item) => {
     setItems((currentState) => {
       const updatedItems = [item, ...currentState];
+      localStorage.setItem("react-stock", JSON.stringify(updatedItems));
+      return updatedItems;
+    });
+  };
+
+  const getItem = (itemId) => {
+    return items.find((item) => item.id === +itemId);
+  };
+
+  const updateItem = (itemId, newAttributes) => {
+    setItems((currentState) => {
+      const itemIndex = currentState.findIndex((item) => item.id === +itemId);
+      const updatedItems = [...currentState];
+      Object.assign(updatedItems[itemIndex], newAttributes, {
+        updatedAt: new Date(),
+      });
       localStorage.setItem("react-stock", JSON.stringify(updatedItems));
       return updatedItems;
     });
@@ -41,6 +57,8 @@ export function StockContextProvider({ children }) {
   const stock = {
     items,
     addItem,
+    getItem,
+    updateItem,
     deleteItem,
   };
 
