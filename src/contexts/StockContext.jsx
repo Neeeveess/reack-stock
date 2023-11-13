@@ -29,9 +29,19 @@ export function StockContextProvider({ children }) {
       return updatedItems;
     });
   };
+
+  const deleteItem = (itemId) => {
+    setItems((currentState) => {
+      const updatedItems = currentState.filter((item) => item.id !== itemId);
+      localStorage.setItem("react-stock", JSON.stringify(updatedItems));
+      return updatedItems;
+    });
+  };
+
   const stock = {
     items,
     addItem,
+    deleteItem,
   };
 
   return (
